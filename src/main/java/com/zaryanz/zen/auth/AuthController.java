@@ -8,9 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zaryanz.zen.dto.LoginDto;
 import com.zaryanz.zen.dto.RegisterDto;
 import com.zaryanz.zen.user.Role;
 import com.zaryanz.zen.user.RoleRepository;
@@ -37,8 +39,13 @@ public class AuthController {
 		
 	}
 	
+	@PostMapping("login")
+	public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+		return null;
+	}
+	
 	@PostMapping("register")
-	public ResponseEntity<String> register(RegisterDto registerDto) {
+	public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
 		
 		if(userRepository.existsByUsername(registerDto.getUsername())) {
 			return new ResponseEntity<>("Username is taken", HttpStatus.BAD_REQUEST);
