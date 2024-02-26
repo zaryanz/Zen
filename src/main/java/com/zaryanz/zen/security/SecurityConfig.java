@@ -9,8 +9,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.AntPathMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -23,8 +27,12 @@ public class SecurityConfig {
 		http
 			.csrf().disable()
 			.authorizeHttpRequests()
+			.requestMatchers("/api/auth/**").permitAll()
+			.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
 			.anyRequest().authenticated()
 			.and().httpBasic();
+		
+		http.headers().frameOptions().disable();
 		
 		return http.build();
 	}
@@ -49,6 +57,11 @@ public class SecurityConfig {
 	public AuthenticationManager authenticationManager(
 			AuthenticationConfiguration authenticationConfiguration) throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();
+	}
+	
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 }
