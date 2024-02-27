@@ -13,6 +13,11 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class Role {
 
+	@Override
+	public String toString() {
+		return "Role [id=" + id + ", name=" + name + "]";
+	}
+
 	@Id
 	@GeneratedValue
 	private long id;

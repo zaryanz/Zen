@@ -23,6 +23,11 @@ import jakarta.persistence.CascadeType;
 @Getter @Setter @NoArgsConstructor
 public class UserEntity {
 	
+	@Override
+	public String toString() {
+		return "UserEntity [id=" + id + ", username=" + username + ", password=" + password + ", roles=" + roles + "]";
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;

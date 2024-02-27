@@ -17,6 +17,12 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class KanbanTask {
 	
+	@Override
+	public String toString() {
+		return "KanbanTask [id=" + id + ", description=" + description + ", status=" + status + ", asignee=" + asignee
+				+ ", tags=" + tags + "]";
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;

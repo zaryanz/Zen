@@ -1,5 +1,6 @@
 package com.zaryanz.zen.kanban.board;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.validator.constraints.*;
@@ -23,6 +24,12 @@ import lombok.Setter;
 @Table(name = "boards")
 public class KanbanBoard {
 	 
+	@Override
+	public String toString() {
+		return "KanbanBoard [id=" + id + ", title=" + title + ", description=" + description + ", columns=" + columns
+				+ "]";
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
@@ -36,5 +43,5 @@ public class KanbanBoard {
 	private String description;
 	
 	@Column(name = "columns")
-	private List<String> columns;
+	private List<String> columns = Arrays.asList("Backlog", "In Progress", "Done");
 }
