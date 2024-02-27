@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +31,6 @@ public class AuthController {
 	private RoleRepository roleRepository;
 	private PasswordEncoder passwordEncoder;
 	
-	@Autowired
 	public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository,
 			RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
 		
@@ -41,7 +43,12 @@ public class AuthController {
 	
 	@PostMapping("login")
 	public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
-		return null;
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
+				loginDto.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		return new ResponseEntity<>("User signed in", HttpStatus.OK);
+		
 	}
 	
 	@PostMapping("register")
@@ -53,7 +60,7 @@ public class AuthController {
 		
 		UserEntity user = new UserEntity();
 		user.setUsername(registerDto.getUsername());
-		user.setPassword(registerDto.getPassword());
+		user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 		Role roles = roleRepository.findByName("USER").get();
 		user.setRoles(Collections.singletonList(roles));
 		
